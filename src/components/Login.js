@@ -1,11 +1,31 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Header from "./Header";
+import { checkValidData } from "../utils/validate";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const name = useRef(null);
+  const email = useRef(null);
+  const password = useRef(null);
 
   const toggleSignInForm = () => {
+    setErrorMessage("");
     setIsSignInForm(!isSignInForm);
+  };
+
+  const handleButtonClick = (e) => {
+    e.preventDefault();
+    // Handle sign in or sign up logic here
+    setErrorMessage(
+      checkValidData(
+        isSignInForm,
+        name.current?.value,
+        email.current.value,
+        password.current.value,
+      ),
+    );
   };
   return (
     <div className="relative h-screen bg-black/60 flex flex-col justify-center items-center">
@@ -20,26 +40,34 @@ const Login = () => {
         <h1 className="text-3xl font-bold mb-6 ">
           {isSignInForm ? "Sign In" : "Sign Up"}
         </h1>
-        {isSignInForm && (
+        {!isSignInForm && (
           <input
+            ref={name}
             type="text"
             placeholder="Full Name"
             className="p-2 my-2 bg-black/80"
           />
         )}
         <input
+          ref={email}
           type="email"
           placeholder="Email address"
           className="p-2 my-2 bg-black/80"
         />
         <input
+          ref={password}
           type="password"
           placeholder="Password"
           className="p-2 my-2 bg-black/80"
         />
-        <button className="bg-red-600 p-2 my-2">
+        <button className="bg-red-600 p-2 my-2" onClick={handleButtonClick}>
           {isSignInForm ? "Sign In" : "Sign Up"}
         </button>
+        {errorMessage && (
+          <p className="text-red-500 pt-2 whitespace-pre-wrap">
+            {errorMessage}
+          </p>
+        )}
         <p className="text-gray-400 mt-4">
           {isSignInForm ? "New to Netflix?" : "Already have an account?"}{" "}
           <span
