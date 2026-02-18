@@ -18,3 +18,5 @@
 - NetflixGPT
     - Search Bar
     - Movie Suggestions
+
+deployed on Hosting URL: https://netflixgpt-e34ec.web.app
